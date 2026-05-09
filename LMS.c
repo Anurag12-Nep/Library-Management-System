@@ -1,10 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 int add_book();
 int search_book();
 int remove_book();
 int display_books();
 int update_book();
+int check_particular_book();
 
 int main()
 {
@@ -15,7 +17,7 @@ int main()
     
     printf("******Library Management System******\n");
     printf("Select Your Option Below:\n");
-    printf("1. Add Book\n2. Search Book\n3. Remove Book\n4. Display Books\n5. Update Book\n");
+    printf("1. Add Book\n2. Search Book\n3. Remove Book\n4. Display Books\n5. Update Book\n6. Search Book\n");
     scanf("%d",&choice);
     switch (choice)
     {
@@ -33,6 +35,9 @@ int main()
         break;
     case 5:
         update_book();
+        break;
+    case 6:
+        check_particular_book();
         break;
     default:
         printf("Invalid Choice...");
@@ -255,4 +260,41 @@ int update_book()
         printf("Book ID not found.\n");
     }
     return 0;    
+}
+
+int check_particular_book()
+{
+    FILE *fp;
+    char s_book[50];
+    char name[50],author[60],level[20];
+    int id,found=0;
+    fp=fopen("Record.txt","r");
+    if(fp==NULL)
+    {
+        printf("File not open.\n");
+        exit(0);
+    }
+    printf("Enter Book name to search: ");
+    scanf(" %[^\n]",s_book);
+    while(fscanf(fp,"ID:%d\nBook Name: %[^\n]\nAuthor Name: %[^\n]\nLevel: %[^\n]\n",&id, name, author, level)!=EOF)
+    {
+        if(strcmp(s_book,name)==0)
+        {
+            found = 1;
+
+            printf("\n---Book Found---\n");
+            printf("ID: %d\n", id);
+            printf("Book Name: %s\n", name);
+            printf("Author Name: %s\n", author);
+            printf("Level: %s\n", level);
+
+        
+        }
+    }
+    if(found==0)
+    {
+        printf("Book not found.\n");
+    }
+    fclose(fp);
+    return 0;
 }
